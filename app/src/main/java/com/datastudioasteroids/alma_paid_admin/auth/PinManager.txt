@@ -1,0 +1,21 @@
+package com.datastudioasteroids.alma_paid_admin.auth
+
+import android.content.Context
+
+object PinManager {
+    private const val PREFS = "auth_prefs"
+    private const val KEY_PIN = "secret_pin"
+
+    fun isPinSet(ctx: Context): Boolean =
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .contains(KEY_PIN)
+
+    fun setPin(ctx: Context, pin: String) {
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit().putString(KEY_PIN, pin).apply()
+    }
+
+    fun validatePin(ctx: Context, pin: String): Boolean =
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getString(KEY_PIN, null) == pin
+}
