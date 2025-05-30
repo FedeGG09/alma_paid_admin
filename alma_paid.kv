@@ -5,7 +5,7 @@ ScreenManager:
     EstudiantesScreen:
     CursosScreen:
     MatriculasScreen:
-    InvoicesScreen:
+    DueScreen:
     EstudianteFormScreen:
 
 <DashboardScreen>:
@@ -261,7 +261,7 @@ ScreenManager:
                 on_release: root.add_student_popup()
 
 
-<InvoicesScreen>:
+<DueScreen>:
     name: 'pagos'
     BoxLayout:
         orientation: 'vertical'
@@ -282,6 +282,8 @@ ScreenManager:
                 text: '<'
                 size_hint_x: None
                 width: dp(40)
+                color: 0,0,0,1
+                background_color: .9,.9,.9,1
                 on_release: app.root.current = 'inicio'
 
             Label:
@@ -292,7 +294,7 @@ ScreenManager:
 
         ScrollView:
             GridLayout:
-                id: invoices_list
+                id: container
                 cols: 1
                 size_hint_y: None
                 height: self.minimum_height

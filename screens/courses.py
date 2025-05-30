@@ -6,6 +6,8 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.metrics import dp
+from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Color, Rectangle
 
 from data.repository import SQLiteRepository
 from data.models import Student, Course, Enrollment
@@ -56,17 +58,16 @@ class CursosScreen(Screen):
         Se dispara cada vez que esta pantalla se vuelve current:
         carga cursos desde la BD y genera un botón por cada uno.
         """
-        repo = SQLiteRepository()
         courses = repo.list_courses()
         if not courses:
             # Si la BD está vacía, usamos la lista fija sin IDs
-            courses = [Course(id=None, title=name, description="") for name in self.fallback_courses]
+            courses = [Course(id=None, title=name, description="", monthly_fee=0.0)
+                       for name in self.fallback_courses]
 
         container = self.ids.courses_list
         container.clear_widgets()
 
         for c in courses:
-            # Cada curso es un botón con fondo blanco y texto negro
             btn = Button(
                 text=c.title,
                 size_hint_y=None,
@@ -75,18 +76,14 @@ class CursosScreen(Screen):
                 background_color=(1, 1, 1, 1),
                 color=(0, 0, 0, 1)
             )
-            # Al presionar, mostramos popup con alumnos inscritos
-            btn.bind(on_release=lambda btn, course_id=c.id: self.show_students(course_id, btn.text))
+            # Cuando tengan ID None (fallback), las popups mostrarán "— No hay inscritos —"
+            btn.bind(on_release=lambda btn, cid=c.id, title=c.title: self.show_students(cid, title))
             container.add_widget(btn)
 
     def show_students(self, course_id, course_title):
-        from kivy.uix.boxlayout import BoxLayout
-        from kivy.uix.label import Label
-        from kivy.uix.button import Button
-        from kivy.uix.popup import Popup
-        from kivy.metrics import dp
-        from kivy.graphics import Color, Rectangle
-
+        """
+        Muestra en un popup los estudiantes inscritos en el curso dado.
+        """
         # Recolectar inscripciones y estudiantes
         enrollments = repo.list_enrollments()
         student_ids = [e.student_id for e in enrollments if e.course_id == course_id]
@@ -95,48 +92,45 @@ class CursosScreen(Screen):
         # Contenedor raíz con fondo blanco
         content = BoxLayout(orientation='vertical', padding=10, spacing=5)
         with content.canvas.before:
-            Color(1, 1, 1, 1)     # blanco
-            self._rect = Rectangle(pos=content.pos, size=content.size)
-        # Asegurar que el rectángulo siga al widget
-        content.bind(pos=lambda inst, val: setattr(self._rect, 'pos', val),
-                     size=lambda inst, val: setattr(self._rect, 'size', val))
+            Color(1, 1, 1, 1)
+            rect = Rectangle(pos=content.pos, size=content.size)
+        content.bind(pos=lambda inst, val: setattr(rect, 'pos', val),
+                     size=lambda inst, val: setattr(rect, 'size', val))
 
         # Título
-        title = Label(
+        content.add_widget(Label(
             text=f"[b]Inscritos en:[/b]\n{course_title}",
             markup=True,
             size_hint_y=None,
             height=dp(40),
-            color=(0,0,0,1)
-        )
-        content.add_widget(title)
+            color=(0, 0, 0, 1)
+        ))
 
         # Lista de estudiantes o mensaje
         if students:
             for s in students:
-                lbl = Label(
+                content.add_widget(Label(
                     text=f"{s.id}: {s.name}",
                     size_hint_y=None,
                     height=dp(30),
-                    color=(0,0,0,1)
-                )
-                content.add_widget(lbl)
+                    color=(0, 0, 0, 1)
+                ))
         else:
             content.add_widget(Label(
                 text="— No hay inscritos —",
                 size_hint_y=None,
                 height=dp(30),
-                color=(0,0,0,1)
+                color=(0, 0, 0, 1)
             ))
 
-        # Botón de cerrar, también fondo blanco y texto negro
+        # Botón de cerrar
         close_btn = Button(
             text="Cerrar",
             size_hint_y=None,
             height=dp(40),
             background_normal='',
-            background_color=(1,1,1,1),
-            color=(0,0,0,1)
+            background_color=(1, 1, 1, 1),
+            color=(0, 0, 0, 1)
         )
         content.add_widget(close_btn)
 

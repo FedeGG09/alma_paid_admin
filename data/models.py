@@ -14,7 +14,8 @@ class Student:
 class Course:
     id: int
     title: str
-    description: str = ""   # ahora opcional, por defecto vacío
+    description: str  # ahora obligatorio (sin valor por defecto)
+    monthly_fee: float
 
 @dataclass
 class Enrollment:
