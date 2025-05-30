@@ -1,0 +1,356 @@
+#: import dp kivy.metrics.dp
+
+ScreenManager:
+    DashboardScreen:
+    EstudiantesScreen:
+    CursosScreen:
+    MatriculasScreen:
+    InvoicesScreen:
+    EstudianteFormScreen:
+
+<DashboardScreen>:
+    name: 'inicio'
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Widget:
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(300)
+            spacing: dp(10)
+            padding: dp(20), 0
+
+            Image:
+                source: 'logo.png'
+                size_hint: None, None
+                size: dp(150), dp(150)
+                allow_stretch: True
+                pos_hint: {'center_x': 0.5}
+
+            Label:
+                text: 'Bienvenido a AlmaPaid'
+                font_size: dp(24)
+                bold: True
+                color: 0,0,0,1
+                halign: 'center'
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Label:
+                text: 'Selecciona una sección abajo.'
+                font_size: dp(16)
+                color: 0,0,0,1
+                halign: 'center'
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        Widget:
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            canvas.before:
+                Color:
+                    rgba: .95, .95, .95, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            spacing: dp(10)
+            padding: dp(10)
+
+            Button:
+                text: 'Inicio'
+                background_normal: ''
+                background_color: 1,1,1,1
+                color: 0,0,0,1
+                on_release: app.root.current = 'inicio'
+
+            Button:
+                text: 'Estudiantes'
+                background_normal: ''
+                background_color: 1,1,1,1
+                color: 0,0,0,1
+                on_release: app.root.current = 'estudiantes'
+
+            Button:
+                text: 'Talleres'
+                background_normal: ''
+                background_color: 1,1,1,1
+                color: 0,0,0,1
+                on_release: app.root.current = 'talleres'
+
+            Button:
+                text: 'Inscripciones'
+                background_normal: ''
+                background_color: 1,1,1,1
+                color: 0,0,0,1
+                on_release: app.root.current = 'inscripciones'
+
+            Button:
+                text: 'Pagos'
+                background_normal: ''
+                background_color: 1,1,1,1
+                color: 0,0,0,1
+                on_release: app.root.current = 'pagos'
+
+
+<EstudiantesScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 10
+
+        Label:
+            text: "Estudiantes"
+            font_size: '24sp'
+            size_hint_y: None
+            height: 50
+            color: 0, 0, 0, 1  # Letra negra
+
+        ScrollView:
+            GridLayout:
+                id: students_list
+                cols: 1
+                spacing: 5
+                size_hint_y: None
+                height: self.minimum_height
+
+
+<CursosScreen>:
+    name: 'talleres'
+    BoxLayout:
+        orientation: 'vertical'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+            spacing: dp(10)
+
+            Button:
+                text: '<'
+                size_hint_x: None
+                width: dp(40)
+                on_release: app.root.current = 'inicio'
+
+            Label:
+                text: 'Talleres'
+                font_size: dp(20)
+                bold: True
+                color: 0,0,0,1
+
+        ScrollView:
+            GridLayout:
+                id: courses_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: dp(50)
+                row_force_default: True
+                spacing: dp(5)
+                padding: dp(10)
+
+
+<MatriculasScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+        # Aquí no hace falta fondo adicional, hereda el blanco
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+
+            Button:
+                text: '<'
+                color: 0, 0, 0, 1  # Letras negras
+                background_color: 0.9, 0.9, 0.9, 1  # Gris claro
+                size_hint_x: None
+                width: dp(40)
+                on_release: app.root.current = 'inicio'
+
+            Label:
+                text: "Inscripciones"
+                font_size: dp(20)
+                bold: True
+                color: 0, 0, 0, 1  # Negro
+
+        RecycleView:
+            id: enrollment_rv
+            viewclass: "Label"
+            size_hint_y: 0.5
+            RecycleBoxLayout:
+                default_size: None, dp(40)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        GridLayout:
+            cols: 2
+            size_hint_y: 0.4
+            row_default_height: dp(40)
+            row_force_default: True
+            spacing: dp(10)
+
+            TextInput:
+                id: enrollment_id
+                hint_text: "ID (editar opcional)"
+                multiline: False
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+
+            TextInput:
+                id: enrollment_status
+                hint_text: "Estado"
+                multiline: False
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+
+            Spinner:
+                id: student_spinner
+                text: "Seleccionar Estudiante"
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+
+            Spinner:
+                id: course_spinner
+                text: "Seleccionar Curso"
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(40)
+            spacing: dp(10)
+
+            Button:
+                text: "Guardar"
+                background_color: 0.9, 0.9, 0.9, 1
+                color: 0, 0, 0, 1
+                on_release: root.save_enrollment()
+
+            Button:
+                text: "Nuevo estudiante"
+                background_color: 0.9, 0.9, 0.9, 1
+                color: 0, 0, 0, 1
+                on_release: root.add_student_popup()
+
+
+<InvoicesScreen>:
+    name: 'pagos'
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: 1,1,1,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+            spacing: dp(10)
+
+            Button:
+                text: '<'
+                size_hint_x: None
+                width: dp(40)
+                on_release: app.root.current = 'inicio'
+
+            Label:
+                text: 'Pagos'
+                font_size: dp(20)
+                bold: True
+                color: 0,0,0,1
+
+        ScrollView:
+            GridLayout:
+                id: invoices_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: dp(50)
+                row_force_default: True
+                spacing: dp(5)
+                padding: dp(10)
+
+
+<EstudianteFormScreen>:
+    name: 'estudiante_form'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(30)
+        spacing: dp(15)
+
+        Label:
+            text: 'Formulario de Estudiante'
+            font_size: dp(28)
+            bold: True
+            color: 0,0,0,1
+            size_hint_y: None
+            height: dp(40)
+
+        TextInput:
+            id: name_input
+            hint_text: 'Nombre'
+            size_hint_y: None
+            height: dp(40)
+            multiline: False
+
+        TextInput:
+            id: email_input
+            hint_text: 'Email'
+            size_hint_y: None
+            height: dp(40)
+            multiline: False
+
+        TextInput:
+            id: status_input
+            hint_text: 'Estado'
+            size_hint_y: None
+            height: dp(40)
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(20)
+
+            Button:
+                text: 'Guardar'
+                background_color: 0.12,0.55,0.91,1
+                color: 1,1,1,1
+                on_release:
+                    app.root.current = 'estudiantes'
+
+            Button:
+                text: 'Cancelar'
+                background_color: 0.8,0.8,0.8,1
+                on_release: app.root.current = 'estudiantes'

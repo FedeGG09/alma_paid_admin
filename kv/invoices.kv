@@ -1,0 +1,53 @@
+# kv/invoices.kv
+<InvoicesScreen>:
+    name: "invoices"
+    rv: rv
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10
+        spacing: 10
+
+        Label:
+            text: "Facturas"
+            font_size: "24sp"
+            size_hint_y: None
+            height: 40
+
+        RecycleView:
+            id: rv
+            viewclass: "BoxLayout"
+            RecycleBoxLayout:
+                default_size: None, dp(40)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        RecycleView:
+            id: rv
+            viewclass: "InvoiceItem"
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<InvoiceItem@BoxLayout>:
+    dni: ""
+    total: ""
+    surcharge: ""
+    status: ""
+    spacing: 10
+    padding: 5
+    size_hint_y: None
+    height: 40
+
+    Label:
+        text: root.dni
+    Label:
+        text: root.total
+    Label:
+        text: root.surcharge
+    Label:
+        text: root.status

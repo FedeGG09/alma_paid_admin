@@ -1,0 +1,10 @@
+# Kivy framework
+kivy
+
+# Dependencias de Windows para Kivy (SDL2, GLEW, ANGLE)
+kivy_deps.sdl2
+kivy_deps.glew
+kivy_deps.angle
+
+pandas>=2.0.0
+openpyxl>=3.0.0
